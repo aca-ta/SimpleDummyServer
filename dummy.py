@@ -21,7 +21,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_body.encode('utf-8'))
         logging.info('[Request method] GET')
-        logging.info('[Request headers]\n' + str(self.headers))
+        logging.info("[Request headers]\n%s", str(self.headers))
 
     def do_POST(self):
         """ return the http response when it receives the POST request. """
@@ -33,11 +33,11 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(response_body)
         logging.info('[Request method] POST')
-        logging.info('[Request headers]\n' + str(self.headers))
+        logging.info("[Request headers]\n%s", str(self.headers))
 
         content_len = int(self.headers.getheader('content-length', 0))
         post_body = self.rfile.read(content_len)
-        logging.info('[Request doby]\n' + post_body)
+        logging.info('[Request doby]\n%s', post_body)
 
 
 def main():
