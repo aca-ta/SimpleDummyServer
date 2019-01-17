@@ -2,15 +2,18 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import logging
 
+def get_response_body(filename: str):
+    """ get response body. """
+    res_body = open(filename)
+    return res_body.read()
+
 
 class MyHTTPRequestHandler(BaseHTTPRequestHandler):
     """ Dummy Web sevrer class. """
 
     def do_GET(self):
         """ return the http response when it receives the GET request. """
-        f = open("index.html")
-        response_body = f.read()
-        print(response_body)
+        response_body = get_response_body("index.html")
 
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=UTF-8')
@@ -22,8 +25,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         """ return the http response when it receives the POST request. """
-        f = open("index.html")
-        response_body = f.read()
+        response_body = get_response_body("index.html")
 
         self.send_response(200)
         self.send_header('Content-type', 'text/xml; charset=UTF-8')
