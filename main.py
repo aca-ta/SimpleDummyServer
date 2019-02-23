@@ -1,7 +1,9 @@
 """ Simple Dummy Server """
+from __future__ import annotations
 import argparse
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import logging
+from typing import Type, TypeVar
 
 def get_response_body(filename: str):
     """ get response body. """
@@ -9,12 +11,22 @@ def get_response_body(filename: str):
     return res_body.read()
 
 
+MyHandler = TypeVar('MyHandler', bound='MyHTTPRequestHandler')
 class MyHTTPRequestHandler(BaseHTTPRequestHandler):
     """ Dummy Web sevrer class. """
+    response_file: str = ""
+
+    @classmethod
+    def generate_handler(cls: Type[MyHandler], response_file: str) -> Type[MyHandler]:
+        """ return HTTPRequestHandler. """
+        cls.response_file = response_file
+
+        return cls
+
 
     def do_GET(self):
         """ return the http response when it receives the GET request. """
-        response_body = get_response_body("index.html")
+        response_body = get_response_body(self.response_file)
 
         self.send_response(200)
         self.send_header('Content-type', 'text/html; charset=UTF-8')
@@ -44,18 +56,20 @@ def parse_args():
     """ parse args """
     parser = argparse.ArgumentParser()
     parser.add_argument('--port', type=int, default=8000)
+    parser.add_argument('--res', type=str, default='index.html')
 
     args = parser.parse_args()
 
-    return args.port
+    return args.port, args.res
 
 
 
 def main():
     """ main """
     host = ''
-    port = parse_args()
-    httpd = HTTPServer((host, port), MyHTTPRequestHandler)
+    port, res = parse_args()
+    handler = MyHTTPRequestHandler.generate_handler(res)
+    httpd = HTTPServer((host, port), handler)
 
     logging.info('Server Starting...')
     logging.info('Listening at port :%d', port)
