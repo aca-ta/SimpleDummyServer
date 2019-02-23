@@ -24,7 +24,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         return cls
 
 
-    def do_GET(self):
+    def do_GET(self): # TODO: add type.
         """ return the http response when it receives the GET request. """
         response_body = get_response_body(self.response_file)
 
