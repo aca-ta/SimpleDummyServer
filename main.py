@@ -5,6 +5,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 import logging
 from typing import Type, TypeVar
 
+
 def get_response_body(filename: str):
     """ get response body. """
     res_body = open(filename)
@@ -12,19 +13,21 @@ def get_response_body(filename: str):
 
 
 MyHandler = TypeVar('MyHandler', bound='MyHTTPRequestHandler')
+
+
 class MyHTTPRequestHandler(BaseHTTPRequestHandler):
     """ Dummy Web sevrer class. """
     response_file: str = ""
 
     @classmethod
-    def generate_handler(cls: Type[MyHandler], response_file: str) -> Type[MyHandler]:
+    def generate_handler(cls: Type[MyHandler],
+                         response_file: str) -> Type[MyHandler]:
         """ return HTTPRequestHandler. """
         cls.response_file = response_file
 
         return cls
 
-
-    def do_GET(self): # TODO: add type.
+    def do_GET(self):  # TODO: add type.
         """ return the http response when it receives the GET request. """
         response_body = get_response_body(self.response_file)
 
@@ -52,6 +55,7 @@ class MyHTTPRequestHandler(BaseHTTPRequestHandler):
         post_body = self.rfile.read(content_len)
         logging.info('[Request doby]\n%s', post_body)
 
+
 def parse_args():
     """ parse args """
     parser = argparse.ArgumentParser()
@@ -61,7 +65,6 @@ def parse_args():
     args = parser.parse_args()
 
     return args.port, args.res
-
 
 
 def main():
