@@ -5,7 +5,7 @@ The simple dummy http server.
 ## Usage
 
 ```shell
-pipenv run python dummy.py
+pipenv run python main.py --port=8888
 ```
 
 ## Require
